@@ -14,7 +14,10 @@ public class RoundedImageView extends ImageView {
     private float mTopRight = 0;
     private float mBottomRight = 0;
     private float mBottomLeft = 0;
-    RoundRectShape mRoundRectShape;
+    private RoundRectShape mRoundRectShape;
+    private final Paint paint = new Paint();
+    private Bitmap mBitmap;
+    private BitmapShader mBitmapShader;
 
     public RoundedImageView(Context context) {
         super(context);
@@ -53,14 +56,13 @@ public class RoundedImageView extends ImageView {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        final Paint paint = new Paint();
-        final Bitmap bitmap = ((BitmapDrawable) getDrawable()).getBitmap();
-        final BitmapShader bitmapShader = new BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
-
-
+        if (((BitmapDrawable) getDrawable()) != null) {
+            mBitmap = ((BitmapDrawable) getDrawable()).getBitmap();
+            mBitmapShader = new BitmapShader(mBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+        }
 
         paint.setAntiAlias(true);
-        paint.setShader(bitmapShader);
+        paint.setShader(mBitmapShader);
 
         mRoundRectShape.resize(getWidth(), getHeight());
         mRoundRectShape.draw(canvas, paint);
